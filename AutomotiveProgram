@@ -1,0 +1,206 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class Automotive extends JFrame implements ActionListener {
+    JCheckBox oilChange, radiatorFlush, transmissionFlush, inspection, tireRotation, mufflerReplacment; // CheckBoxes
+    JTextField totalPartsCost, totalLaborCost, servicesAndLabor, parts, taxes, totalCosts; // Text Fields
+
+    public static void main(String[] args) {
+        Automotive automotive = new Automotive(); //Creating a new object
+        automotive.createFrame(); //calling the createFrame method to create the UI of the Application
+    }
+
+    public void createFrame() {
+        JFrame f = new JFrame();
+        f.setSize(400, 500);        //The size of the entire frame
+        f.setLayout(null);
+        f.setVisible(true);
+        JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9;      //All the Labels are initialized here
+        l1 = new JLabel("Maintenance Services");
+        l1.setBounds(35, 5, 250, 130);      // Here the the format is(x-axis, y-axis, width, height)
+
+        l2 = new JLabel("Parts and Labor");
+        l2.setBounds(600, 55, 100, 15);
+
+        l3 = new JLabel("Total Parts Cost ($)");
+        l3.setBounds(475, 85, 250, 15);
+
+        l4 = new JLabel("Total Labor at 20$ per hour ($)");
+        l4.setBounds(415, 105, 250, 15);
+
+        l5 = new JLabel("Summary");
+        l5.setBounds(400, 305, 250, 15);
+
+        l6 = new JLabel("Service and Labor");
+        l6.setBounds(400, 335, 150, 25);
+
+        l7 = new JLabel("Parts");
+        l7.setBounds(400, 365, 150, 25);
+
+        l8 = new JLabel("Taxes");
+        l8.setBounds(400, 395, 150, 25);
+
+        l9 = new JLabel("Total cost");
+        l9.setBounds(400, 425, 150, 25);
+
+        //Adding all the Labels to the Main Swings frame
+        f.add(l1);
+        f.add(l2);
+        f.add(l3);
+        f.add(l4);
+        f.add(l5);
+        f.add(l6);
+        f.add(l7);
+        f.add(l8);
+        f.add(l9);
+
+        //Creating the new checkBoxes which were defined inside the class
+        oilChange = new JCheckBox("Oil Change ($25.00)");
+        oilChange.setBounds(30, 90, 250, 15);
+
+        radiatorFlush = new JCheckBox("Radiator Flush ($45.00)");
+        radiatorFlush.setBounds(30, 110, 250, 15);
+
+        transmissionFlush = new JCheckBox("Transmission Flush ($80.00)");
+        transmissionFlush.setBounds(30, 130, 250, 15);
+
+        inspection = new JCheckBox("Inspection ($30.00)");
+        inspection.setBounds(30, 150, 250, 15);
+
+        tireRotation = new JCheckBox("Tire Rotation ($25.00)");
+        tireRotation.setBounds(30, 170, 250, 15);
+
+        mufflerReplacment = new JCheckBox("Muffler Replacement ($125.00)");
+        mufflerReplacment.setBounds(30, 190, 250, 15);
+
+
+        totalPartsCost = new JTextField();
+        totalPartsCost.setBounds(600, 85, 100, 15);
+
+        totalLaborCost = new JTextField();
+        totalLaborCost.setBounds(600, 105, 100, 15);
+
+        servicesAndLabor = new JTextField();
+        servicesAndLabor.setBounds(525, 335, 150, 25);
+
+        parts = new JTextField();
+        parts.setBounds(525, 365, 150, 25);
+
+        taxes = new JTextField();
+        taxes.setBounds(525, 395, 150, 25);
+
+        totalCosts = new JTextField();
+        totalCosts.setBounds(525, 425, 150, 25);
+
+
+        //Initializing and creating the buttons.
+        JButton calculateTotal, clear, exit;
+
+        calculateTotal = new JButton("Calculate Total");
+        calculateTotal.setBounds(500, 155, 150, 25);
+        calculateTotal.addActionListener(this);
+
+
+        clear = new JButton("Clear");
+        clear.setBounds(30, 350, 250, 25);
+
+        //Here the ActionListener is used to check whether the button is clicked or not.
+        // If clicked the following method is executed for clear button
+        clear.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent actionEvent) {
+                oilChange.setSelected(false);
+                radiatorFlush.setSelected(false);
+                transmissionFlush.setSelected(false);
+                inspection.setSelected(false);
+                tireRotation.setSelected(false);
+                mufflerReplacment.setSelected(false);
+                totalCosts.setText("");
+                taxes.setText("");
+                parts.setText("");
+                servicesAndLabor.setText("");
+                totalLaborCost.setText("");
+                totalPartsCost.setText("");
+            }
+        });
+
+        exit = new JButton("Exit");
+        exit.setBounds(30, 420, 250, 25);
+        exit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        //Adding the CheckBoxes, Text Fields and Buttons into the main swings frame
+        f.add(oilChange);
+        f.add(radiatorFlush);
+        f.add(transmissionFlush);
+        f.add(inspection);
+        f.add(tireRotation);
+        f.add(mufflerReplacment);
+        f.add(totalPartsCost);
+        f.add(totalLaborCost);
+        f.add(calculateTotal);
+        f.add(servicesAndLabor);
+        f.add(parts);
+        f.add(taxes);
+        f.add(totalCosts);
+        f.add(clear);
+        f.add(exit);
+        f.setSize(800, 800);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        double totalAmountChecked = 0.0, finalAmountForParts = 0.0;
+
+        String totalParts = totalPartsCost.getText();
+        String laborCost = totalLaborCost.getText();
+
+        // If the checkboxes of the parts is selected the total amount is added depending upon which option is selected
+        if (oilChange.isSelected()) {
+            totalAmountChecked += 25;
+        }
+        if (radiatorFlush.isSelected()) {
+            totalAmountChecked += 45;
+        }
+        if (transmissionFlush.isSelected()) {
+            totalAmountChecked += 80;
+        }
+        if (inspection.isSelected()) {
+            totalAmountChecked += 30;
+        }
+        if (tireRotation.isSelected()) {
+            totalAmountChecked += 25;
+        }
+        if (mufflerReplacment.isSelected()) {
+            totalAmountChecked += 125;
+        }
+
+        int partsCost, totallaborsCost;
+        // Calculating the total Parts and the total Labor cost
+
+        if (totalParts.equals("")) {
+            partsCost = 0;
+        } else {
+            partsCost = Integer.parseInt(totalParts);
+        }
+        if (laborCost.equals("")) {
+            totallaborsCost = 0;
+        } else {
+            totallaborsCost = Integer.parseInt(laborCost);
+        }
+        double tax = totalAmountChecked / 6;
+
+        //Displaying the total amounts for service and Labor, Parts, Taxes and the total cost incurred
+        finalAmountForParts = totalAmountChecked + partsCost;
+        parts.setText(String.valueOf(finalAmountForParts));
+        servicesAndLabor.setText(String.valueOf(totallaborsCost));
+        taxes.setText(String.valueOf(tax));
+
+        double totalBill = finalAmountForParts + totallaborsCost + tax;
+        totalCosts.setText(String.valueOf(totalBill));
+
+    }
+}
