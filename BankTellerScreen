@@ -1,0 +1,337 @@
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+import java.io.FileWriter;
+
+public class gui extends BankAccount {
+   
+   static JFrame frame = new JFrame("Bank Program");
+   static JFrame frame2 = new JFrame("Bank Program");
+   float sum;
+   float dep;
+   float with;
+   private ArrayList <Float> transactions = new ArrayList <Float>();//array list of transactions
+   BankAccount bank = new BankAccount();
+   savings save = new savings();
+   
+   public gui()
+   {
+       
+       
+      
+       JPanel panel = new JPanel();
+       panel.setLayout(null);
+       
+       // label
+       final JTextField input = new JTextField(10);
+       input.setBounds(250, 100, 100, 20);
+       final JTextField input2 = new JTextField(10);
+       input2.setBounds(250, 125, 100, 20);
+
+       // textfield to read input
+       JLabel label2 = new JLabel("Enter Account Number: ");
+       label2.setBounds(100, 100, 250, 30);
+       JLabel label3 = new JLabel("Enter Starting Balance ");
+       label3.setBounds(100, 120, 250, 30);
+
+       JLabel label4 = new JLabel("Length should be between 10-12 characters");
+       label4.setBounds(100, 40, 500, 15);
+
+       // button to check
+       JButton check = new JButton();
+       check.setText("Enter");
+       check.setBounds(200, 150, 250, 20);
+
+       // label to display result
+       JLabel result = new JLabel("");
+       result.setBounds(200, 200, 300, 30);
+       JLabel result2 = new JLabel("");
+       result2.setBounds(200, 185, 300, 30);
+
+       // action listener to check on click of button
+       check.addActionListener(new ActionListener() {
+
+           @Override
+           public void actionPerformed(ActionEvent aE) {
+               // taking user entered text
+               bank.accountNumber = input.getText();
+               String bal = input2.getText();
+               bank.balance = Float.parseFloat(bal);
+               
+               
+               if (display(bank.accountNumber)==1) {
+                   result.setText("Valid Account Number");
+                   result2.setText("Balance: " + bank.balance);
+
+               } else {
+                   result.setText("Invalid Account Number (10-12 characters)");
+               }
+ 
+           }
+           
+           public int display(String number)//checks to see if acount number is vailed
+           {   
+               if(number.matches(".*[0-9]*") && number.length() >= 10 && number.length() <= 12)
+               {
+                  //size of application for mobile app part 2 and settings
+                  setSize( 600 , 600);
+                  setLayout(null);
+                  setVisible(true);
+                  setDefaultCloseOperation(EXIT_ON_CLOSE); //will run after window is closed without this
+                  return 1;
+               }    
+               else
+                   return -1;
+           }
+           
+       });//end action preformed for button
+       
+       
+       //panel 1
+       panel.add(label2);
+       panel.add(label4);
+       panel.add(label3);
+       panel.add(input);
+       panel.add(input2);
+       panel.add(check);
+       panel.add(result);
+       panel.add(result2);
+       frame.add(panel);
+
+       frame.setSize(600, 300);
+       frame.setLocationRelativeTo(null);
+       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       frame.setVisible(true);
+       ///End Frame One
+       //////////////////////////////
+       //////////////////////////////
+       
+       
+      ButtonGroup bg = new ButtonGroup(); //creating button group
+
+      JLabel labe = new JLabel("Account Type:");
+      labe.setBounds(100,50,300,20); // x, y, width, height 0,0 is top left corner!
+      
+      JRadioButton rbCeckBoxSize1 = new JRadioButton("Checkings");
+      rbCeckBoxSize1.setBounds(100,100,150,20);
+      
+      JRadioButton rbCeckBoxSize2 = new JRadioButton("Savings");
+      rbCeckBoxSize2.setBounds(100,120,150,20);
+      
+      JButton enter = new JButton("Enter");
+      enter.setBounds(100,150,110,30);
+      
+      JButton addButton = new JButton("Add Transaction");
+      addButton.setBounds(100,250,140,30);
+        
+      JButton printReciept = new JButton("Print Reciept");
+      printReciept.setBounds(100,300,120,30);
+      
+      
+      //Text print feilds
+      JLabel taxTotal = new JLabel("Intrest: %3");
+      taxTotal.setBounds(300, 365, 150, 25);
+
+      
+      JTextField txtFoodTotal = new JTextField();
+      txtFoodTotal.setBounds(525, 335, 150, 25);
+
+      JTextField txtTaxTotal = new JTextField();
+      txtTaxTotal.setBounds(525, 365, 150, 25);
+
+
+      bg.add(rbCeckBoxSize1);//adding radio buttons to group
+      bg.add(rbCeckBoxSize2);//adding radio buttons to group
+      
+      add(rbCeckBoxSize1);//size
+      add(rbCeckBoxSize2);//size
+      
+      
+      //adds to the frame
+      add(labe);//header label
+      //add(labe2);//header label
+       
+      add(enter);//button
+      add(addButton);//button
+      add(printReciept);//button
+      
+      
+      add(taxTotal);//text label
+      
+      
+      enter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) 
+            {
+                if(rbCeckBoxSize1.isSelected()) //adds to amount and message if selected
+                {
+                    String firstNumber = JOptionPane.showInputDialog("Deposit");
+                    String secondNumber = JOptionPane.showInputDialog("Withdraw");
+
+                    dep = Float.parseFloat(firstNumber);
+                    with = Float.parseFloat(secondNumber);
+                    sum = deposit(dep);
+                    sum = deposit(with);
+                    
+                    JOptionPane.showMessageDialog(null, "Balance: " + sum, "Sum of two Integers", JOptionPane.PLAIN_MESSAGE);  
+                    
+
+                }//end if
+                if(rbCeckBoxSize2.isSelected()) //adds to amount and message if selected
+                {
+                   
+                    String firstNumber2 = JOptionPane.showInputDialog("Deposit To Savings");
+                    String secondNumber2 = JOptionPane.showInputDialog("Withdraw To Savings");
+                    float sum2 = 0;
+                    float dep = Float.parseFloat(firstNumber2);
+                    float with = Float.parseFloat(secondNumber2);
+                    sum2 = dep + bank.balance;
+                    sum2 = sum - with; 
+                    JOptionPane.showMessageDialog(null, "Balance: " + sum2, "Sum of two Integers", JOptionPane.PLAIN_MESSAGE);  
+
+                }//end if
+
+
+            }
+      });//end add button action preformed
+      
+      addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) 
+            {      
+                JOptionPane.showMessageDialog(null, "Balance: " + sum, "Added To Reciept", JOptionPane.PLAIN_MESSAGE);
+                transactions.add(sum);      
+            }
+      });//end add button action preformed
+      
+      //prints to a file
+      printReciept.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e ) {
+             writeFile();//method to write file    
+          }
+      });//end
+
+      
+      
+   }
+   
+   public void writeFile()//writer method
+   {
+     
+      try {
+         FileWriter writer = new FileWriter("TransactionReceipt.txt"); 
+         
+         for (float weight : transactions )
+		   {
+		   	writer.write("Account Number: " + bank.accountNumber + "Deposit: " + dep + "Withdraw: " + with + "Balance: " + sum);
+		   }
+      
+         writer.close();
+       } 
+       catch(Exception ex) {
+           ex.printStackTrace();
+       }
+         JOptionPane.showMessageDialog(this, "Receipt has been writen!");      
+   }//end writer method
+
+   
+    public static void main(String[] args) 
+    {
+       gui bankApp = new gui();                 
+       BankAccount bank = new BankAccount();
+         
+    }
+     
+     
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////Bank Class////////////////////////
+
+import java.util.*;
+import javax.swing.*;
+import javax.swing.*;
+import java.io.IOException;
+import java.io.FileWriter;
+
+class BankAccount  extends JFrame 
+{
+        String accountNumber;
+        float balance;
+     
+        public BankAccount()
+        {
+            this.accountNumber = accountNumber;
+            this.balance = balance; 
+        }
+        
+        public String getAccountNumber() {return this.accountNumber;}
+        public float getBalance() {return this.balance;}
+        public void setAccountNumber(String accountNumber) {this.accountNumber = accountNumber;}
+        public void setBalance(float balance) {this.balance = balance;}
+        
+        float deposit(float dep)
+        {
+            balance = balance + dep;
+            return balance;
+        }
+        
+        float withdraw(float with) throws FundsInsufficientException
+        {
+            if(with > balance)
+               throw new FundsInsufficientException(balance,with);
+            else
+               balance=balance-with;
+
+            return balance;
+        }
+
+        //@Override
+        public String toStrong()
+        {
+            return " " + this.accountNumber + " " + this.balance;
+        }
+        
+}//end class  
+
+class savings extends BankAccount{
+   float intrest;
+   public float getIntrest() {return this.intrest;}
+   public void setIntrest(float intrest) {this.intrest = intrest;}
+   
+   public savings()
+   {
+      intrest = 3/100;
+   }
+   
+   public float intrest(float bal)
+   {
+      intrest = intrest * bal;
+      return intrest;
+   }
+   
+   
+
+}
+
+class FundsInsufficientException extends Exception
+{
+        float balance;
+        float withdraw_amount;
+        FundsInsufficientException(float bal,float w_amt)
+        {
+                balance=bal;
+                withdraw_amount=w_amt;
+        }
+        
+        public String toString()
+        {
+                return "Your withdraw amount ("+withdraw_amount+") is less than the balance ("+balance+"). No withdrawal was recorded.";
+        }
+}   
+     
+       
+    
+
